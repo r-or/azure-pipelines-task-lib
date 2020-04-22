@@ -5,7 +5,10 @@ import os = require('os');
 import path = require('path');
 import cmdm = require('./taskcommand');
 import shelljs = require('shelljs');
-import syncRequest = require('sync-request');
+import forceSync = require('sync-rpc');
+
+
+const syncDownloadUrl = forceSync(require.resolve('./download-async'));
 
 const COMMAND_TAG = '[command]';
 const COMMAND_LENGTH = COMMAND_TAG.length;
@@ -255,8 +258,8 @@ export class MockTestRunner {
         }
         console.log('Downloading file:', url);
         shelljs.mkdir('-p', downloadDestination);
-        const result: any = syncRequest('GET', url);
-        fs.writeFileSync(filePath, result.getBody());
+        const filebuf = syncDownloadUrl(url);
+        fs.writeFileSync(filePath, filebuf);
     }
 
     // Downloads tarGz to the download destination, making any necessary folders along the way.

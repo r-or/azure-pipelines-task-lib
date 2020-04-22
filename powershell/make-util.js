@@ -5,7 +5,9 @@ var fs = require('fs');
 var path = require('path');
 var process = require('process');
 var shell = require('shelljs');
-var syncRequest = require('sync-request');
+var forceSync = require('sync-rpc');
+
+var syncDownloadUrl = forceSync(require.resolve('../download-async'))
 
 // global paths
 var downloadPath = path.join(__dirname, '_download');
@@ -131,9 +133,9 @@ var downloadFile = function (url) {
         }
 
         // download the file
+        const filebuf = syncDownloadUrl(url);
         mkdir('-p', path.join(downloadPath, 'file'));
-        var result = syncRequest('GET', url);
-        fs.writeFileSync(targetPath, result.getBody());
+        fs.writeFileSync(targetPath, filebuf);
 
         // write the completed marker
         fs.writeFileSync(marker, '');

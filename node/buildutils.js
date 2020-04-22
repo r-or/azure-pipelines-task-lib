@@ -4,7 +4,9 @@ var fs = require('fs');
 var os = require('os');
 var path = require('path');
 var process = require('process');
-var syncRequest = require('sync-request');
+var forceSync = require('sync-rpc');
+
+var syncDownloadUrl = forceSync(require.resolve('./download-async.js'))
 
 var downloadPath = path.join(__dirname, '_download');
 var testPath = path.join(__dirname, '_test');
@@ -75,9 +77,11 @@ var downloadFile = function (url) {
         }
 
         // download the file
+        const filebuf = syncDownloadUrl(url);
+        // console.log(syncResponse)
+
         mkdir('-p', path.join(downloadPath, 'file'));
-        var result = syncRequest('GET', url);
-        fs.writeFileSync(targetPath, result.getBody());
+        fs.writeFileSync(targetPath, filebuf);
 
         // write the completed marker
         fs.writeFileSync(marker, '');
