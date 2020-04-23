@@ -1,6 +1,6 @@
 var rp = require('request-promise-native')
 
-function downloadUrl() {
+function downloadFile() {
     return (url) => {
         return rp({
             url: url,
@@ -12,4 +12,4 @@ function downloadUrl() {
     }
 }
 
-module.exports = downloadUrl;
+module.exports = downloadFile;

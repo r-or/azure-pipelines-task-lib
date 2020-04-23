@@ -7,9 +7,7 @@ import cmdm = require('./taskcommand');
 import shelljs = require('shelljs');
 import forceSync = require('sync-rpc');
 
-
-const syncDownloadUrl = forceSync(require.resolve('./download-async'));
-
+const syncDownloadFile = forceSync(require.resolve('./download-async'));
 const COMMAND_TAG = '[command]';
 const COMMAND_LENGTH = COMMAND_TAG.length;
 const downloadDirectory = path.join(process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE, 'azure-pipelines-task-lib', '_download');
@@ -258,7 +256,7 @@ export class MockTestRunner {
         }
         console.log('Downloading file:', url);
         shelljs.mkdir('-p', downloadDestination);
-        const filebuf = syncDownloadUrl(url);
+        const filebuf = syncDownloadFile(url);
         fs.writeFileSync(filePath, filebuf);
     }
 
@@ -272,7 +270,7 @@ export class MockTestRunner {
         }
         const tarGzName: string = 'node.tar.gz';
         this.downloadFile(url, downloadDestination, tarGzName);
-        
+
         // Extract file
         const originalCwd: string = process.cwd();
         process.chdir(downloadDestination);

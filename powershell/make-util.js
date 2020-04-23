@@ -7,7 +7,7 @@ var process = require('process');
 var shell = require('shelljs');
 var forceSync = require('sync-rpc');
 
-var syncDownloadUrl = forceSync(require.resolve('../download-async'))
+var syncDownloadFile = forceSync(require.resolve('../node/download-async'))
 
 // global paths
 var downloadPath = path.join(__dirname, '_download');
@@ -133,8 +133,8 @@ var downloadFile = function (url) {
         }
 
         // download the file
-        const filebuf = syncDownloadUrl(url);
         mkdir('-p', path.join(downloadPath, 'file'));
+        const filebuf = syncDownloadFile(url);
         fs.writeFileSync(targetPath, filebuf);
 
         // write the completed marker
